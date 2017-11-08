@@ -3,6 +3,8 @@ package info.raryosu.android.qiitaclient
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ListView
 import info.raryosu.android.qiitaclient.model.Article
 import info.raryosu.android.qiitaclient.model.User
@@ -17,8 +19,13 @@ class MainActivity : AppCompatActivity() {
         val listAdapter = ArticleListAdapter(applicationContext)
         listAdapter.articles = listOf(dummyArticle("Kotlin入門", "たろう"), dummyArticle("Java入門", "じろう"))
 
-        val listview: ListView = findViewById(R.id.list_view) as ListView
-        listview.adapter = listAdapter
+        val listView: ListView = findViewById(R.id.list_view) as ListView
+        listView.adapter = listAdapter
+        listView.setOnItemClickListener { AdapterView, view, position, id ->
+            val article = listAdapter.articles[position]
+            ArticleActivity.intent(this, article).let { startActivity(it) }
+        }
+
     }
 
     private fun dummyArticle(title: String, userName: String): Article =
@@ -26,4 +33,6 @@ class MainActivity : AppCompatActivity() {
                     title = title,
                     url = "https://kotlinlang.org/",
                     user = User(id = "", name = userName, profileImageUrl = ""))
+
+
 }
